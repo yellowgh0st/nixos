@@ -10,6 +10,11 @@
       ./hardware-configuration.nix
     ];
 
+  boot.kernelPackages = pkgs.linuxPackages_5_14;
+  #boot.extraModulePackages = with config.boot.kernelPackages; [
+  #
+  #];
+
   boot.supportedFilesystems = [ "btrfs" ];
   hardware.enableAllFirmware = true;
   hardware.cpu.amd.updateMicrocode = true;
@@ -58,11 +63,9 @@
   services.flatpak.enable = true;
   # Configure keymap in X11
   services.xserver.layout = "us";
-  # services.xserver.xkbOptions = "eurosign:e";
+  services.xserver.xkbOptions = "eurosign:e";
   hardware.opengl.extraPackages = with pkgs; [
-   rocm-runtime
    rocm-opencl-icd
-   rocm-device-libs
    rocm-opencl-runtime
   ];
 
@@ -121,7 +124,7 @@
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.augustin = {
      isNormalUser = true;
-     extraGroups = [ "wheel" "video" ]; # Enable ‘sudo’ for the user.
+     extraGroups = [ "wheel" "video" "docker" ]; # Enable ‘sudo’ for the user.
   };
 
   users.defaultUserShell = pkgs.zsh;
@@ -129,7 +132,7 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    atom
+    bpytop
     git
     pass
     gnome.gnome-tweaks
@@ -139,6 +142,7 @@
     lm_sensors
     unzip
     irssi
+    tree
     wl-clipboard
     nodejs
     clinfo
@@ -146,7 +150,17 @@
     winetricks
     ethminer-free
     liquidctl
+    firefox-wayland
+    bundler
+    bundix
+    ruby
+    docker-compose
+    discord
+    virtualbox
+    nixpkgs-fmt
   ];
+
+  virtualisation.docker.enable = true;
 
   programs.steam.enable = true;
 
