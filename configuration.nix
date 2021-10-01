@@ -10,11 +10,9 @@
       ./hardware-configuration.nix
     ];
 
-  boot.kernelPackages = pkgs.linuxPackages_5_14;
   #boot.extraModulePackages = with config.boot.kernelPackages; [
   #
   #];
-
   boot.supportedFilesystems = [ "btrfs" ];
   hardware.enableAllFirmware = true;
   hardware.cpu.amd.updateMicrocode = true;
@@ -64,13 +62,20 @@
   # Configure keymap in X11
   services.xserver.layout = "us";
   services.xserver.xkbOptions = "eurosign:e";
+
+  hardware.opengl = {
+    enable = true;
+    driSupport = true;
+    driSupport32Bit = true;
+  };
+
   hardware.opengl.extraPackages = with pkgs; [
    rocm-opencl-icd
    rocm-opencl-runtime
+   vaapiVdpau
+   libvdpau-va-gl
   ];
 
-  hardware.opengl.driSupport = true;
-  hardware.opengl.driSupport32Bit = true;
   # Enable CUPS to print documents.
   # services.printing.enable = true;
 
@@ -140,6 +145,7 @@
     yarn
     htop
     lm_sensors
+    tdesktop
     unzip
     irssi
     tree
@@ -158,6 +164,8 @@
     discord
     virtualbox
     nixpkgs-fmt
+    ocl-icd
+    khronos-ocl-icd-loader
   ];
 
   virtualisation.docker.enable = true;
