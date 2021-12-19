@@ -10,6 +10,9 @@
       ./hardware-configuration.nix
     ];
 
+  boot.kernelPackages = pkgs.linuxPackages_xanmod;
+  boot.kernelParams = [ "quiet" "vt.global_cursor_default=0" "loglevel=0" "rd.systemd.show_status=false" "rd.udev.log_level=0" ];
+  boot.kernel.sysctl = { "kernel.printk" = "0 0 0 0"; };
   #boot.extraModulePackages = with config.boot.kernelPackages; [
   #
   #];
@@ -22,7 +25,9 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   # boot.loader.efi.efiSysMountPoint = "/boot/efi";
-
+  services.udev.extraRules =  ''
+   ACTION=="add|change", KERNEL=="sd[a-z]", ATTR{queue/rotational}=="0",ATTR{queue/scheduler}="deadline"
+  '';
   networking.hostName = "nixxx"; # Define your hostname.
   networking.networkmanager.enable = true;  # Enables networking
 
@@ -53,10 +58,13 @@
   services.xserver.enable = true;
 
   # Enable the GNOME Desktop Environment.
-  services.xserver.displayManager.gdm.enable = true;
-  services.xserver.displayManager.gdm.wayland = true;
+  services.xserver.displayManager.gdm.enable = false;
+  services.xserver.displayManager.gdm.wayland = false;
   services.xserver.desktopManager.xterm.enable = false;
-  services.xserver.desktopManager.gnome.enable = true;  
+  services.xserver.desktopManager.gnome.enable = false;
+  services.xserver.desktopManager.pantheon.enable = true;
+  services.xserver.displayManager.lightdm.enable = true;  
+  xdg.portal.enable = true;
   programs.xwayland.enable = false;
   services.flatpak.enable = true;
   # Configure keymap in X11
@@ -140,12 +148,10 @@
     bpytop
     git
     pass
-    gnome.gnome-tweaks
     qrencode
     yarn
     htop
     lm_sensors
-    tdesktop
     unzip
     irssi
     tree
@@ -154,18 +160,18 @@
     clinfo
     wine-staging
     winetricks
-    ethminer-free
     liquidctl
-    firefox-wayland
-    bundler
-    bundix
-    ruby
     docker-compose
-    discord
-    virtualbox
     nixpkgs-fmt
-    ocl-icd
-    khronos-ocl-icd-loader
+    keybase-gui
+    firefox
+    discord
+    tdesktop
+    slack
+    appeditor
+    vscode-fhs
+    inkscape
+    gimp
   ];
 
   virtualisation.docker.enable = true;
@@ -196,8 +202,10 @@
     enable = true;
     settings = {
       ipv6_servers = true;
+      doh_servers = true;
       require_dnssec = true;
-
+      require_nolog = true;
+      require_nofilter = true;
       sources.public-resolvers = {
         urls = [
           "https://raw.githubusercontent.com/DNSCrypt/dnscrypt-resolvers/master/v3/public-resolvers.md"
@@ -214,8 +222,7 @@
 
   services.keybase.enable = true;
   services.kbfs.enable = true; 
-  # Enable the OpenSSH daemon.
-  # services.openssh.enable = true;
+  services.openssh.enable = false;
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];

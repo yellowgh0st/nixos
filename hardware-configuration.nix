@@ -8,26 +8,33 @@
     [ (modulesPath + "/installer/scan/not-detected.nix")
     ];
 
-  boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usbhid" "usb_storage" "sd_mod" ];
+  boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usb_storage" "usbhid" "sd_mod" ];
   boot.initrd.kernelModules = [ "amdgpu" ];
   boot.kernelModules = [ "kvm-amd" ];
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
-    { device = "/dev/mapper/enc";
+    { device = "/dev/disk/by-uuid/ff78dd81-99d8-4d96-8ecd-7d58bf8ea67e";
       fsType = "btrfs";
       options = [ "subvol=nixos" "compress=zstd" "noatime" ];
     };
 
-  boot.initrd.luks.devices."enc".device = "/dev/disk/by-uuid/78654043-461d-4da4-8947-3738247b8b7d";
+  boot.initrd.luks.devices."enc".device = "/dev/disk/by-uuid/0b952fa5-eba6-433c-8af2-d8eb54195280";
+
+  fileSystems."/home" =
+    { device = "/dev/disk/by-uuid/ff78dd81-99d8-4d96-8ecd-7d58bf8ea67e";
+      fsType = "btrfs";
+      options = [ "subvol=home" "compress=zstd" "noatime" ];
+    };
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/5BAA-ADBA";
+    { device = "/dev/disk/by-uuid/1017-4F08";
       fsType = "vfat";
     };
 
   swapDevices = [ ];
 
+  hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
   # high-resolution display
   hardware.video.hidpi.enable = lib.mkDefault true;
 }
