@@ -1,7 +1,3 @@
-# Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
-
 { config, pkgs, ... }:
 
 {
@@ -58,14 +54,14 @@
   services.xserver.enable = true;
 
   # Enable the GNOME Desktop Environment.
-  services.xserver.displayManager.gdm.enable = false;
-  services.xserver.displayManager.gdm.wayland = false;
+  services.xserver.displayManager.gdm.enable = true;
+  services.xserver.displayManager.gdm.wayland = true;
   services.xserver.desktopManager.xterm.enable = false;
-  services.xserver.desktopManager.gnome.enable = false;
-  services.xserver.desktopManager.pantheon.enable = true;
-  services.xserver.displayManager.lightdm.enable = true;  
+  services.xserver.desktopManager.gnome.enable = true;
+  services.xserver.desktopManager.pantheon.enable = false;
+  services.xserver.displayManager.lightdm.enable = false;  
   xdg.portal.enable = true;
-  programs.xwayland.enable = false;
+  programs.xwayland.enable = true;
   services.flatpak.enable = true;
   # Configure keymap in X11
   services.xserver.layout = "us";
@@ -172,6 +168,13 @@
     vscode-fhs
     inkscape
     gimp
+    corectrl
+    gnome.dconf-editor
+    transmission-gtk
+    gnomeExtensions.just-perfection
+    gnome.gnome-tweaks
+    gcolor3
+    nodePackages.vercel
   ];
 
   virtualisation.docker.enable = true;
@@ -232,5 +235,5 @@
 
   system.autoUpgrade.enable = true;
   system.autoUpgrade.allowReboot = false;
-  system.stateVersion = "21.05";
+  system.stateVersion = "21.11";
 }
