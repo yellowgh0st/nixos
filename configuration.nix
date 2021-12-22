@@ -22,7 +22,7 @@
   boot.loader.efi.canTouchEfiVariables = true;
   # boot.loader.efi.efiSysMountPoint = "/boot/efi";
   services.udev.extraRules =  ''
-   ACTION=="add|change", KERNEL=="sd[a-z]", ATTR{queue/rotational}=="0",ATTR{queue/scheduler}="deadline"
+   ACTION=="add|change", KERNEL=="sd[a-z]", ATTR{queue/rotational}=="0",ATTR{queue/scheduler}="none"
   '';
   networking.hostName = "nixxx"; # Define your hostname.
   networking.networkmanager.enable = true;  # Enables networking
@@ -154,8 +154,10 @@
     wl-clipboard
     nodejs
     clinfo
-    wine-staging
+    wine64Packages.stagingFull
+    wine64Packages.fonts
     winetricks
+    wine-staging
     liquidctl
     docker-compose
     nixpkgs-fmt
@@ -173,8 +175,8 @@
     transmission-gtk
     gcolor3
     inkscape
-    gnomeExtensions.caffeine
     gnomeExtensions.arcmenu
+    gnomeExtensions.caffeine
     gnomeExtensions.just-perfection
     gnomeExtensions.hide-minimized
     gnomeExtensions.tray-icons-reloaded
