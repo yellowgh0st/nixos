@@ -2,7 +2,7 @@
 
 {
   imports =
-    [ # Include the results of the hardware scan.
+    [
       ./hardware-configuration.nix
     ];
 
@@ -17,22 +17,17 @@
   hardware.cpu.amd.updateMicrocode = true;
   nixpkgs.config.allowUnfree = true;
 
-  # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   # boot.loader.efi.efiSysMountPoint = "/boot/efi";
   services.udev.extraRules =  ''
    ACTION=="add|change", KERNEL=="sd[a-z]", ATTR{queue/rotational}=="0",ATTR{queue/scheduler}="none"
   '';
-  networking.hostName = "nixxx"; # Define your hostname.
-  networking.networkmanager.enable = true;  # Enables networking
+  networking.hostName = "nixxx";
+  networking.networkmanager.enable = true;
 
-  # Set your time zone.
   time.timeZone = "Europe/Prague";
 
-  # The global useDHCP flag is deprecated, therefore explicitly set to false here.
-  # Per-interface useDHCP will be mandatory in the future, so this generated config
-  # replicates the default behaviour.
   networking.useDHCP = false;
   networking.interfaces.enp9s0.useDHCP = true;
   networking.nameservers = [ "127.0.0.1" "::1" ];
@@ -43,17 +38,13 @@
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
-  # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
   console = {
      font = "Lat2-Terminus16";
      keyMap = "us";
   };
 
-  # Enable the X11 windowing system.
   services.xserver.enable = true;
-
-  # Enable the GNOME Desktop Environment.
   services.xserver.displayManager.gdm.enable = true;
   services.xserver.displayManager.gdm.wayland = true;
   services.xserver.desktopManager.xterm.enable = false;
@@ -63,7 +54,6 @@
   xdg.portal.enable = true;
   programs.xwayland.enable = true;
   services.flatpak.enable = true;
-  # Configure keymap in X11
   services.xserver.layout = "us";
   services.xserver.xkbOptions = "eurosign:e";
 
@@ -121,25 +111,15 @@
         };
       }
     ];
-     
-    # use the example session manager (no others are packaged yet so this is enabled by default,
-    # no need to redefine it in your config for now)
-    #media-session.enable = true;
   };
 
-  # Enable touchpad support (enabled default in most desktopManager).
-  # services.xserver.libinput.enable = true;
-
-  # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.augustin = {
      isNormalUser = true;
-     extraGroups = [ "wheel" "video" "docker" ]; # Enable ‘sudo’ for the user.
+     extraGroups = [ "wheel" "video" "docker" ];
   };
 
   users.defaultUserShell = pkgs.zsh;
 
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
   environment.systemPackages = with pkgs; [
     bpytop
     git
@@ -154,8 +134,8 @@
     wl-clipboard
     nodejs
     clinfo
-    wine64Packages.stagingFull
-    wine64Packages.fonts
+    #wine64Packages.stagingFull
+    #wine64Packages.fonts
     winetricks
     wine-staging
     liquidctl
@@ -184,6 +164,10 @@
     nodePackages.vercel
   ];
 
+  nixpkgs.overlays = [ 
+      (import ./overlays/arcmenu.nix)
+   ];
+
   virtualisation.docker.enable = true;
 
   programs.steam.enable = true;
@@ -207,7 +191,6 @@
      enableSSHSupport = true;
   };
 
-  # List services that you want to enable:
   services.dnscrypt-proxy2 = {
     enable = true;
     settings = {
@@ -224,9 +207,6 @@
         cache_file = "/var/lib/dnscrypt-proxy2/public-resolvers.md";
         minisign_key = "RWQf6LRCGA9i53mlYecO4IzT51TGPpvWucNSCh1CBM0QTaLn73Y7GFO3";
       };
-
-      # You can choose a specific set of servers from https://github.com/DNSCrypt/dnscrypt-resolvers/blob/master/v3/public-resolvers.md
-      # server_names = [ ... ];
     };
   };
 
