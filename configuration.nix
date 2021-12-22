@@ -171,9 +171,14 @@
     corectrl
     gnome.dconf-editor
     transmission-gtk
-    gnomeExtensions.just-perfection
-    gnome.gnome-tweaks
     gcolor3
+    inkscape
+    gnomeExtensions.caffeine
+    gnomeExtensions.arcmenu
+    gnomeExtensions.just-perfection
+    gnomeExtensions.hide-minimized
+    gnomeExtensions.tray-icons-reloaded
+    gnome.gnome-tweaks
     nodePackages.vercel
   ];
 
