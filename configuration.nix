@@ -25,6 +25,8 @@
   '';
   networking.hostName = "nixxx";
   networking.networkmanager.enable = true;
+  #networking.extraHosts = ''
+  #''
 
   time.timeZone = "Europe/Prague";
 
@@ -142,6 +144,7 @@
     docker-compose
     nixpkgs-fmt
     keybase-gui
+    brave
     firefox
     discord
     tdesktop
@@ -184,6 +187,7 @@
     qr = ''qrencode -m 2 -t utf8 <<< "$1"'';
     bashtop = "bpytop";
     switch = "sudo nixos-rebuild switch";
+    git-sync-kovan = "git checkout testing && git merge kovan && git push origin testing && git checkout staging && git merge kovan && git push origin staging && git checkout main && git merge staging && git push origin main";
   };
 
   programs.gnupg.agent = {
