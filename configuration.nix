@@ -127,14 +127,12 @@
     git
     pass
     qrencode
-    yarn
     htop
     lm_sensors
     unzip
     irssi
     tree
     wl-clipboard
-    nodejs
     clinfo
     #wine64Packages.stagingFull
     #wine64Packages.fonts
@@ -187,7 +185,7 @@
     qr = ''qrencode -m 2 -t utf8 <<< "$1"'';
     bashtop = "bpytop";
     switch = "sudo nixos-rebuild switch";
-    git-sync-kovan = "git checkout testing && git merge kovan && git push origin testing && git checkout staging && git merge kovan && git push origin staging && git checkout main && git merge staging && git push origin main";
+    git-sync-kovan = "git checkout testing && git merge kovan && git push origin testing && git checkout staging && git merge kovan && git push origin staging && git checkout main && git merge staging && git push origin main && git checkout kovan";
   };
 
   programs.gnupg.agent = {
