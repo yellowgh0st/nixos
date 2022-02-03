@@ -163,6 +163,7 @@
     gnomeExtensions.tray-icons-reloaded
     gnome.gnome-tweaks
     nodePackages.vercel
+    pwntools
   ];
 
   nixpkgs.overlays = [ 
@@ -186,6 +187,8 @@
     bashtop = "bpytop";
     switch = "sudo nixos-rebuild switch";
     git-sync-kovan = "git checkout testing && git merge kovan && git push origin testing && git checkout staging && git merge kovan && git push origin staging && git checkout main && git merge staging && git push origin main && git checkout kovan";
+    unhex = ''pwn unhex $1'';
+    hex = ''pwn hex $1'';
   };
 
   programs.gnupg.agent = {
