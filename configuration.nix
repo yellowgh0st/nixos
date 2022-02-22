@@ -163,11 +163,14 @@
     gnomeExtensions.tray-icons-reloaded
     gnome.gnome-tweaks
     nodePackages.vercel
+    heroku
+    hue-cli
     pwntools
   ];
 
   nixpkgs.overlays = [ 
       (import ./overlays/arcmenu.nix)
+			(import ./overlays/discord.nix)
    ];
 
   virtualisation.docker.enable = true;
@@ -181,11 +184,12 @@
 
   environment.shellAliases = {
     sensors = "watch -n 2 sensors";
-    lightning-effect-1 = "liquidctl set led2 color backwards-marquee-5 2f6017 --speed slowest";
-    lightning-effect-2 = "liquidctl set led2 color rainbow-flow --speed slowest";
+    lightning-effect-1 = "sudo liquidctl set led2 color backwards-marquee-5 2f6017 --speed slowest";
+    lightning-effect-2 = "sudo liquidctl set led2 color rainbow-flow --speed slowest";
     qr = ''qrencode -m 2 -t utf8 <<< "$1"'';
     bashtop = "bpytop";
     switch = "sudo nixos-rebuild switch";
+    nix-update = "sudo nix-channel --update nixos";
     git-sync-kovan = "git checkout testing && git merge kovan && git push origin testing && git checkout staging && git merge kovan && git push origin staging && git checkout main && git merge staging && git push origin main && git checkout kovan";
     unhex = ''pwn unhex $1'';
     hex = ''pwn hex $1'';
@@ -225,7 +229,7 @@
   
   networking.firewall.enable = true;
 
-  system.autoUpgrade.enable = true;
+  system.autoUpgrade.enable = false;
   system.autoUpgrade.allowReboot = false;
   system.stateVersion = "21.11";
 }
